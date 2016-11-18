@@ -1,1 +1,1 @@
-# Automation Smoke tests for Win 10 calculator 
+# Automation Smoke testing for Win 10 calculator 
