@@ -1,0 +1,162 @@
+﻿
+function CheckProcessExists(process)
+{
+  //Checks if process exists already
+  if (Sys.WaitProcess(process).Exists)
+  {
+    //Closes process if it's opened
+    Sys.Process(process).Close()
+  }
+  //Continues execution
+  else;
+}
+
+function Start(process, appindex)
+//Opens app
+{ 
+  //Checks if app opened and closes it
+  CheckProcessExists(process);
+  //Runs testedapp
+  TestedApps.Items(appindex).Run();
+}
+
+function Stop(process)
+//Closes testded app
+{ 
+  //Checks if app opened and closes it
+  CheckProcessExists(process);
+}
+
+function temporary()
+{
+  Start('Microsoft.WindowsCalculator', 0)
+  InputExpression('4+3')
+  Stop('Microsoft.WindowsCalculator')
+}
+
+function InputExpression(expression)
+//Inputs string 'expression' with keyboard into calculator
+{
+  //Grabs calculator window 
+  wCalc = Aliases.Microsoft_WindowsCalculator.Calculator;
+  //Goes through every char of 'expression'
+  for(i = 0; i < expression.length; i++)
+  {
+    //Inputs 'expression' with keyboard
+    wCalc.Keys(expression.substr(i, 1));
+  }
+  //Inputs '=' for getting result
+  wCalc.Keys('=');
+}
+
+function DislpayResult()
+{
+  //Refreshes Sys.Processes and NameMapping for getting displayed result
+  Sys.Process('Microsoft.WindowsCalculator').Refresh()
+  Aliases.Microsoft_WindowsCalculator.result.RefreshMappingInfo()
+  //Grabs the result from display
+  result = String(Aliases.Microsoft_WindowsCalculator.result.Name).replace(/[^\d.-]/g, '');
+  return result;
+}
+
+function OpenExcel(path)
+{
+  //Checks if app opened and closes it
+  CheckProcessExists('Excel.Application');
+  //Declares variaible for Excel app
+  Excel = Sys.OleObject("Excel.Application");
+  //Opens excel file
+  Excel.Workbooks.Open(path);
+}
+
+function InputValue()
+{
+  //Declares variable to connect Rows to ODT
+  Row = ODT.Data.CalcGroup.Calc.Row;
+  //Declares varialbe of input data
+  typeIn = (VarToString(Excel.Cells.Item(Row, 4)).replace(/[^\d.\/*+-]/g, ''));
+  //Input message goes to log
+  Log.Message(typeIn);
+  return typeIn;
+}
+
+function ExpectedValue()
+{
+  //Declares variable to connect Rows to ODT
+  Row = ODT.Data.CalcGroup.Calc.Row;
+  //Declares varialbe of expected result
+  expectedResult = (VarToString(Excel.Cells.Item(Row, 5)).replace(/[^\d.-]/g, ''));
+  return expectedResult;
+}
+
+function CompareActualExpectedResult(expectedOutput, displayed)
+{
+  aqObject.CompareProperty(displayed, cmpEqual, expectedOutput);
+  ODT.Data.CalcGroup.Calc.Row = String(parseInt(ODT.Data.CalcGroup.Calc.Row) + 1);
+}
+
+function MainTest()
+{
+  //Opens Calculator
+  Start('Microsoft.WindowsCalculator', 0);
+  //Opens Excel
+  OpenExcel('C:\\CalcTestCasesSmoke.xlsx');
+  //Inputs values
+  InputExpression(InputValue());
+  //Compares Actual and expected result
+  CompareActualExpectedResult(ExpectedValue(), DislpayResult());
+  //Closes Excel
+  Excel.Quit();
+  //Closes calculator
+  Stop('Microsoft.WindowsCalculator');
+}
+
+
+
+function SearchRow(name, row)
+{
+  //Opens Excel
+  OpenExcel('C:\\CalcTestCasesSmoke.xlsx')
+  //Defines max rows amount
+  RowCount = Excel.ActiveSheet.UsedRange.Rows.Count;
+  //Parse through file
+  for (let i = 1; i <= RowCount; i++)
+  {
+    //Variable contains cell text
+    s = "";
+    s += (VarToString(Excel.Cells.Item(i, row)) + "\r\n");
+    //Finds match in cell text and 'name' text
+    if (aqString.StrMatches(name, s)){ODT.Data.CalcGroup.Calc.Row = i; break}; 
+  }
+  //Closes Excel
+  Excel.Quit();
+}
+
+function SearchPlus()
+{
+  SearchRow('Plus', 3);
+}
+
+function SearchMinus()
+{
+  SearchRow('Minus', 3);
+}
+
+function SearchMultiple()
+{
+  SearchRow('Multiple', 3);
+}
+
+function SearchDivide()
+{
+  SearchRow('Divide', 3);
+}
+
+function SearchCritical()
+{
+  SearchRow('Critical', 2);
+}
+function SearchMajor()
+{
+  SearchRow('Major', 2);
+}

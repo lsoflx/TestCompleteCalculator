@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Root signature="{9252F941-DB23-4FCA-AA50-858B33BB4A19}" version="11.40">
+	<children>
+		<child name="ManualTesting" key="{ADB5F588-FD3B-45FC-822F-0B36BDD6D065}" type="Script Unit" typeId="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}" pluginName="Script">
+			<data path="ManualTesting.js" />
+		</child>
+		<child name="StartStopApp" key="{EB174FE3-5DFC-496F-A50D-8D504516A14E}" type="Script Unit" typeId="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}" pluginName="Script">
+			<data path="StartStopApp.js" />
+		</child>
+		<child name="InputOutput" key="{07A23F23-1C39-4B03-86D6-6378DD13F705}" type="Script Unit" typeId="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}" pluginName="Script">
+			<data path="InputOutput.js" />
+		</child>
+		<child name="ExcelFunc" key="{08696535-0A28-4B92-8730-3633517A7E5A}" type="Script Unit" typeId="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}" pluginName="Script">
+			<data path="ExcelFunc.js" />
+		</child>
+		<child name="MainTest" key="{27B4C983-A382-45A3-B8BB-FF1F4EBE50D2}" type="Script Unit" typeId="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}" pluginName="Script">
+			<data path="MainTest.js" />
+		</child>
+		<child name="Navigation" key="{789C82DC-47CC-46C0-9F21-B4B48F450379}" type="Script Unit" typeId="{291CAE9C-4D20-4F33-8B5F-D48B587F3D65}" pluginName="Script">
+			<data path="Navigation.js" />
+		</child>
+	</children>
+	<folders />
+</Root>
